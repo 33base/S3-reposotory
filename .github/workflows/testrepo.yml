@@ -1,0 +1,25 @@
+name: Build and Run Docker Container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create s3auth.conf from secret
+      run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3auth.conf
+
+    - name: Build Docker image
+      run: docker build . -t my-docker-image
+
+    - name: Run Docker container and execute command
+      run: |
+        docker run --name my-container my-docker-image
+        docker exec my-container batcat /etc/passwd
+
+          
