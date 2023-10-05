@@ -11,14 +11,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Create s3auth.conf from secret
-      run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3auth.conf
+    - name: Create s3creds from secret
+      run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3creds
 
     - name: Build Docker image with BuildKit
       env:
         DOCKER_BUILDKIT: 1
       run: |
-        docker build --secret id=s3auth,src=s3auth.conf . -t my-docker-image
+        docker build --secret id=s3creds,src=s3creds . -t my-docker-image
 
     - name: Run Docker container
       run: docker run -d --name my-container my-docker-image sleep infinity
