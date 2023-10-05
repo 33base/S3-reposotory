@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     curl \
     git \
-    golang-go
+    golang-go \
+    build-essential
 
 # Clone and build apt-s3
 RUN git clone https://github.com/zendesk/apt-s3.git /tmp/apt-s3 && \
