@@ -14,9 +14,6 @@ jobs:
     - name: Create s3auth.conf from secret
       run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3auth.conf
 
-    - name: List directory content
-      run: ls -al
-
     - name: Build Docker image
       run: docker build -f Dockerfile . -t my-docker-image
 
