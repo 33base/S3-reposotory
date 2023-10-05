@@ -17,9 +17,10 @@ jobs:
     - name: Build Docker image
       run: docker build -f Dockerfile . -t my-docker-image
 
-    - name: Run Docker container and execute command
-      run: |
-        docker run --name my-container my-docker-image
-        docker exec my-container batcat /etc/passwd
+    - name: Run Docker container
+      run: docker run -d --name my-container my-docker-image sleep infinity
+    
+    - name: Execute command inside container
+      run: docker exec my-container batcat /etc/passwd
 
           
