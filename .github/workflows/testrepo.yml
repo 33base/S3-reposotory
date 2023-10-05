@@ -9,13 +9,13 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Create s3auth.conf from secret
       run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3auth.conf
 
     - name: Build Docker image
-      run: docker build . -t my-docker-image
+      run: docker build -f Dockerfile . -t my-docker-image
 
     - name: Run Docker container and execute command
       run: |
