@@ -15,7 +15,7 @@ RUN curl -Lo /tmp/apt-s3.deb https://github.com/zendesk/apt-s3/releases/download
     rm /tmp/apt-s3.deb
 
 # Configure apt to use apt-s3
-RUN echo "deb [trusted=yes] s3://devops-intern-33base/myrepo jamny main" > /etc/apt/sources.list.d/s3bucket.list
+RUN echo "deb [trusted=yes] s3://devops-intern-33base/myrepo jamny main" > /etc/apt/sources.list
 
 # Use the secret during build to update repositories and install bat
 RUN --mount=type=secret,id=s3creds,target=/etc/apt/s3creds \
