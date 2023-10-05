@@ -11,9 +11,14 @@ RUN apt-get update && apt-get install -y \
     golang-go \
     build-essential
 
-# Clone and build apt-s3
-RUN git clone https://github.com/zendesk/apt-s3.git /tmp/apt-s3 && \
-    cd /tmp/apt-s3 && \
+# Clone apt-s3
+RUN git clone https://github.com/zendesk/apt-s3.git /tmp/apt-s3
+
+# Modify the Makefile to replace `go get` with `go install`
+RUN sed -i 's/go get ./go install .\/.../g' /tmp/apt-s3/Makefile
+
+# Build apt-s3 and copy the binary to /usr/bin
+RUN cd /tmp/apt-s3 && \
     make && \
     cp apt-s3 /usr/bin/
 
