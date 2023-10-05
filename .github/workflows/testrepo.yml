@@ -25,5 +25,3 @@ jobs:
     
     - name: Execute command inside container
       run: docker exec my-container batcat /etc/passwd
-
-          
