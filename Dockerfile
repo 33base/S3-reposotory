@@ -1,27 +1,14 @@
-# Use the latest version of Ubuntu as the base image
+# Use the official Ubuntu image
 FROM ubuntu:latest
 
-# Install necessary packages and utilities
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    gnupg \
-    software-properties-common \
-    curl
+# Update the package list
+RUN apt-get update
 
-# Download apt-s3 .deb package and install it
-RUN curl -Lo /tmp/apt-s3.deb https://github.com/zendesk/apt-s3/releases/download/0.1.5/apt-s3_0.1.5_amd64.deb && \
-    dpkg -i /tmp/apt-s3.deb && \
-    rm /tmp/apt-s3.deb
+# Add your S3 bucket to the APT repository list
+RUN echo "deb [trusted=yes] http://repo-s3.s3.eu-central-1.amazonaws.com/ stable main" | tee -a /etc/apt/sources.list > /dev/null
 
-# Configure apt to use apt-s3
-RUN echo "deb s3://devops-intern-33base/myrepo.eu-central-1.amazonaws.com/ jamny main" > /etc/apt/sources.list.d/s3bucket.list
+# Update the package list again to see packages from your S3 bucket
+RUN apt-get update
 
-
-# Use the secret during build to update repositories and install bat
-RUN --mount=type=secret,id=s3creds,target=/etc/apt/s3creds \
-    apt-get update && apt-get install -y bat
-
-# Set the default command for the container
-CMD ["bash"]
-
+# Install the apt-s3 package
+RUN apt-get install -y apt-s3
