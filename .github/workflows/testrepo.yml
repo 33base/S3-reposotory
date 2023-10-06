@@ -11,19 +11,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Create s3auth.conf from secret
-      run: echo "${{ secrets.S3AUTH_CONF_CONTENT }}" > s3auth.conf
 
-    - name: Build Docker image with BuildKit
-      env:
-        DOCKER_BUILDKIT: 1
+    - name: Build Docker image
       run: |
-        docker build --secret id=s3auth,src=s3auth.conf . -t my-docker-image
+        docker build -t apt-s3-image .
 
     - name: Run Docker container
-      run: docker run -d --name my-container my-docker-image sleep infinity
-    
-    - name: Execute command inside container
-      run: docker exec my-container batcat /etc/passwd
+      run: |
+        docker run -d --name apt-s3-container apt-s3-image
+
+    - name: Check apt-s3 installation
+      run: |
+        docker exec apt-s3-container apt-s3 -help
 
           
