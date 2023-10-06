@@ -12,3 +12,5 @@ RUN apt-get update
 
 # Install the apt-s3 package
 RUN apt-get install -y apt-s3
+
+CMD ["sleep", "infinity"]
