@@ -23,5 +23,3 @@ jobs:
     - name: Check apt-s3 installation
       run: |
         docker exec apt-s3-container apt-s3 -help
-
-          
