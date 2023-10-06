@@ -11,6 +11,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Assume AWS Role
+      id: assume-role
+      run: |
+        TEMP_ROLE=$(aws sts assume-role \
+                    --role-arn arn:aws:iam::478470725140:role/GitHubActionsRole \
+                    --role-session-name github-actions)
+        echo "AWS_ACCESS_KEY_ID=$(echo $TEMP_ROLE | jq -r .Credentials.AccessKeyId)" >> $GITHUB_ENV
+        echo "AWS_SECRET_ACCESS_KEY=$(echo $TEMP_ROLE | jq -r .Credentials.SecretAccessKey)" >> $GITHUB_ENV
+        echo "AWS_SESSION_TOKEN=$(echo $TEMP_ROLE | jq -r .Credentials.SessionToken)" >> $GITHUB_ENV
 
     - name: Build Docker image
       run: |
@@ -19,9 +28,10 @@ jobs:
     - name: Run Docker container
       run: |
         docker run -d \
-        -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-        -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-         --name apt-s3-container apt-s3-image
+        -e AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} \
+        -e AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} \
+        -e AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }} \
+        --name apt-s3-container apt-s3-image
 
     - name: Check apt-s3 installation
       run: |
