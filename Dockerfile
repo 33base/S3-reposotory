@@ -4,6 +4,8 @@ FROM ubuntu:latest
 # Update the package list
 RUN apt-get update
 
+RUN apt-get install -y awscli
+
 # Add your S3 bucket to the APT repository list
 RUN echo "deb [trusted=yes] http://repo-s3.s3.eu-central-1.amazonaws.com/ stable main" | tee -a /etc/apt/sources.list > /dev/null
 
