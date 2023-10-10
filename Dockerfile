@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common
 
 # Add your repository
-RUN echo "deb [trusted=yes] s3://devops-intern-33base/myrepo jamny main" >> /etc/apt/sources.list
+RUN echo "deb [trusted=yes] s3://repo-s3 stable main" >> /etc/apt/sources.list
 
 # Use the secret during build to update repositories and install bat
 RUN --mount=type=secret,id=s3auth,target=/etc/apt/s3auth.conf \
